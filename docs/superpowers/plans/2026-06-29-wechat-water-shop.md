@@ -51,6 +51,8 @@ Use the current repository root as the project root.
 - Create: `miniprogram/app.json`
 - Create: `miniprogram/app.wxss`
 - Create: `miniprogram/sitemap.json`
+- Create: minimal placeholder page files (`index.js`, `index.json`, `index.wxml`, `index.wxss`) for every route declared in `miniprogram/app.json`
+- Create: minimal placeholder cloud function entries for `cloudfunctions/api/index.js`, `cloudfunctions/payNotify/index.js`, `cloudfunctions/refundNotify/index.js`, and `cloudfunctions/platformNotify/index.js`
 
 - [ ] **Step 1: Write the initial package and project config**
 
@@ -124,14 +126,18 @@ App({
 
 - [ ] **Step 3: Run the first local verification**
 
+Run: `npm run lint`
+
+Expected: PASS because placeholder cloud function entries exist.
+
 Run: `npm test`
 
-Expected: `No test files found` or a Vitest no-tests message before test files exist.
+Expected: `No test files found` or a Vitest no-tests message before test files exist. Vitest 3 exits with code 1 for this no-test state; this is acceptable for Task 1 and will be resolved by Task 2 when tests are added.
 
 - [ ] **Step 4: Commit**
 
 ```bash
-git add package.json project.config.json .gitignore miniprogram
+git add package.json package-lock.json project.config.json .gitignore miniprogram cloudfunctions docs/superpowers/plans/2026-06-29-wechat-water-shop.md
 git commit -m "chore: scaffold mini program project"
 ```
 

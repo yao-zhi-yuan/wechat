@@ -1,0 +1,21 @@
+{
+  "pages": [
+    "pages/shop/index",
+    "pages/checkout/index",
+    "pages/orders/index",
+    "pages/order-detail/index",
+    "pages/admin/index/index",
+    "pages/admin/products/index",
+    "pages/admin/product-edit/index",
+    "pages/admin/orders/index",
+    "pages/admin/order-detail/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "水饮到家",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f6f8fb"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

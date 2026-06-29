@@ -1,0 +1,15 @@
+node_modules/
+miniprogram_npm/
+dist/
+coverage/
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env
+.env.*
+!.env.example
+.vscode/
+.idea/
+project.private.config.json

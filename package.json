@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "node --check cloudfunctions/api/index.js && node --check cloudfunctions/payNotify/index.js && node --check cloudfunctions/refundNotify/index.js && node --check cloudfunctions/platformNotify/index.js"
+  },
+  "devDependencies": {
+    "vitest": "^3.2.0"
+  }
+}
