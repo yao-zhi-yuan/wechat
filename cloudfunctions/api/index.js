@@ -1,6 +1,7 @@
 const cloud = require('wx-server-sdk');
 const { createContext } = require('./lib/context');
 const { fail } = require('./lib/response');
+const { listProducts } = require('./lib/products');
 const { getShopConfig, getSession } = require('./lib/shop');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
@@ -10,7 +11,8 @@ const APPLICATION_ERROR_CODES = new Set(['FORBIDDEN']);
 const actions = {
   ping: async () => ({ ok: true, data: { pong: true } }),
   getShopConfig,
-  getSession
+  getSession,
+  listProducts
 };
 
 exports.main = async (event) => {

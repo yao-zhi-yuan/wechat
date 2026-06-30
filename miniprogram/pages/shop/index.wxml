@@ -1,1 +1,68 @@
-<view>Shop</view>
+<view class="page">
+  <view wx:if="{{loading}}" class="state state-loading">
+    <view class="spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <view wx:elif="{{error}}" class="state">
+    <text class="state-title">加载失败</text>
+    <text class="state-text">{{error}}</text>
+    <button class="retry-button" bindtap="retryLoad">重试</button>
+  </view>
+
+  <view wx:else class="content">
+    <view class="shop-header">
+      <view class="shop-title">{{shopName}}</view>
+      <view wx:if="{{shop.announcement}}" class="announcement">{{shop.announcement}}</view>
+      <view class="shop-meta">
+        <view wx:if="{{shop.businessHours}}" class="meta-row">
+          <text class="meta-label">营业时间</text>
+          <text>{{shop.businessHours}}</text>
+        </view>
+        <view wx:if="{{shop.servicePhone}}" class="meta-row">
+          <text class="meta-label">服务电话</text>
+          <text>{{shop.servicePhone}}</text>
+        </view>
+        <view wx:if="{{shop.deliveryDescription}}" class="meta-row">
+          <text class="meta-label">配送说明</text>
+          <text>{{shop.deliveryDescription}}</text>
+        </view>
+      </view>
+    </view>
+
+    <scroll-view wx:if="{{categories.length}}" class="category-tabs" scroll-x enable-flex>
+      <view wx:for="{{categories}}" wx:key="_id" class="category-tab">{{item.name}}</view>
+    </scroll-view>
+
+    <view wx:if="{{products.length}}" class="product-list">
+      <view wx:for="{{products}}" wx:key="_id" class="product-card">
+        <view class="product-main">
+          <view class="product-name">{{item.name}}</view>
+          <view class="product-info">
+            <text wx:if="{{item.categoryName}}">{{item.categoryName}}</text>
+            <text wx:if="{{item.spec}}">{{item.spec}}</text>
+          </view>
+          <view wx:if="{{item.description}}" class="product-description">{{item.description}}</view>
+          <view class="product-bottom">
+            <text class="price">{{item.priceText}}</text>
+            <view class="cart-control">
+              <text wx:if="{{item.cartQuantity}}" class="quantity">已选 {{item.cartQuantity}}</text>
+              <button class="add-button" data-id="{{item._id}}" bindtap="addToCart">+</button>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:else class="empty">
+      <text>暂无在售商品</text>
+    </view>
+  </view>
+
+  <view wx:if="{{cartTotalCount}}" class="checkout-bar">
+    <view class="checkout-summary">
+      <text class="checkout-count">已选 {{cartTotalCount}} 件</text>
+    </view>
+    <button class="checkout-button" bindtap="goCheckout">去结算</button>
+  </view>
+</view>

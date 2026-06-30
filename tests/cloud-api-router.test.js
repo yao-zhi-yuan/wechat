@@ -6,7 +6,7 @@ const require = createRequire(import.meta.url);
 const apiPath = require.resolve('../cloudfunctions/api/index.js');
 const originalLoad = Module._load;
 
-function loadApiWithCloud(cloudOverrides = {}, shopModule) {
+function loadApiWithCloud(cloudOverrides = {}, shopModule, productsModule) {
   delete require.cache[apiPath];
 
   const cloud = {
@@ -23,6 +23,9 @@ function loadApiWithCloud(cloudOverrides = {}, shopModule) {
     }
     if (request === './lib/shop' && shopModule) {
       return shopModule;
+    }
+    if (request === './lib/products' && productsModule) {
+      return productsModule;
     }
     return originalLoad.call(this, request, parent, isMain);
   };
@@ -127,5 +130,22 @@ describe('cloud api router', () => {
       ok: true,
       data: { pong: true }
     });
+  });
+
+  it('routes listProducts actions', async () => {
+    const listProducts = vi.fn(async (data) => ({
+      ok: true,
+      data: { categories: [], products: [], requestData: data }
+    }));
+    const { api } = loadApiWithCloud({}, undefined, { listProducts });
+
+    await expect(api.main({
+      action: 'listProducts',
+      data: { includeHidden: false }
+    })).resolves.toEqual({
+      ok: true,
+      data: { categories: [], products: [], requestData: { includeHidden: false } }
+    });
+    expect(listProducts).toHaveBeenCalledOnce();
   });
 });
