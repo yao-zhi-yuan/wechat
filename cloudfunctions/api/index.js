@@ -4,7 +4,7 @@ const { fail } = require('./lib/response');
 const { createOrder } = require('./lib/orders');
 const { getMyOrder, listMyOrders } = require('./lib/orderQueries');
 const { createPayment } = require('./lib/payments');
-const { listProducts } = require('./lib/products');
+const { adminListProducts, listProducts, saveProduct } = require('./lib/products');
 const { getShopConfig, getSession } = require('./lib/shop');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
@@ -16,6 +16,8 @@ const actions = {
   getShopConfig,
   getSession,
   listProducts,
+  adminListProducts,
+  saveProduct,
   createOrder,
   createPayment,
   getMyOrder,

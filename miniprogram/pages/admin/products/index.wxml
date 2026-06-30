@@ -1,1 +1,30 @@
-<view>Admin Products</view>
+<view class="page">
+  <view class="toolbar">
+    <view class="title">商品管理</view>
+    <button class="create-button" bindtap="createProduct">新增</button>
+  </view>
+
+  <view wx:if="{{loading}}" class="state">加载中...</view>
+
+  <view wx:elif="{{error}}" class="state state-error">
+    <text>{{error}}</text>
+  </view>
+
+  <view wx:elif="{{products.length}}" class="product-list">
+    <view wx:for="{{products}}" wx:key="_id" class="product-card" data-id="{{item._id}}" bindtap="editProduct">
+      <view class="product-main">
+        <view class="product-name">{{item.name}}</view>
+        <view class="product-meta">{{item.spec}}</view>
+        <view class="product-meta">排序 {{item.sortOrder}}</view>
+      </view>
+      <view class="product-side">
+        <view class="price">{{item.priceText}}</view>
+        <view class="status {{item.status === 'off_sale' ? 'status-off' : ''}}">{{item.statusText}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:else class="state">
+    <text>暂无商品</text>
+  </view>
+</view>

@@ -1,1 +1,56 @@
-<view>Admin Product Edit</view>
+<view class="page">
+  <view wx:if="{{loading}}" class="state">加载中...</view>
+
+  <view wx:elif="{{loadFailed}}" class="state state-error">
+    <text>{{error}}</text>
+  </view>
+
+  <view wx:else class="form">
+    <view wx:if="{{error}}" class="error-banner">{{error}}</view>
+
+    <view class="field">
+      <view class="label">商品名称</view>
+      <input class="input" value="{{form.name}}" data-field="name" bindinput="updateField" placeholder="例如 农夫山泉桶装水" />
+    </view>
+
+    <view class="field">
+      <view class="label">分类 ID</view>
+      <input class="input" value="{{form.categoryId}}" data-field="categoryId" bindinput="updateField" placeholder="例如 water" />
+    </view>
+
+    <view class="field">
+      <view class="label">规格</view>
+      <input class="input" value="{{form.spec}}" data-field="spec" bindinput="updateField" placeholder="例如 19L / 24瓶" />
+    </view>
+
+    <view class="field">
+      <view class="label">价格</view>
+      <input class="input" type="digit" value="{{form.priceYuan}}" data-field="priceYuan" bindinput="updateField" placeholder="例如 25.00" />
+    </view>
+
+    <view class="field">
+      <view class="label">排序</view>
+      <input class="input" type="number" value="{{form.sortOrder}}" data-field="sortOrder" bindinput="updateField" placeholder="数字越小越靠前" />
+    </view>
+
+    <view class="field">
+      <view class="label">图片地址</view>
+      <input class="input" value="{{form.imageUrl}}" data-field="imageUrl" bindinput="updateField" placeholder="cloud:// 或 https:// 图片地址" />
+    </view>
+
+    <view class="field">
+      <view class="label">商品描述</view>
+      <textarea class="textarea" value="{{form.description}}" data-field="description" bindinput="updateField" placeholder="可选"></textarea>
+    </view>
+
+    <view class="switch-row">
+      <view>
+        <view class="label">上架销售</view>
+        <view class="hint">{{isOnSale ? '用户可在店铺看到该商品' : '用户暂时看不到该商品'}}</view>
+      </view>
+      <switch checked="{{isOnSale}}" bindchange="toggleStatus" />
+    </view>
+
+    <button class="save-button" loading="{{saving}}" disabled="{{saving}}" bindtap="saveProduct">保存商品</button>
+  </view>
+</view>

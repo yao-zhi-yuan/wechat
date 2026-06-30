@@ -158,6 +158,33 @@ describe('cloud api router', () => {
     expect(listProducts).toHaveBeenCalledOnce();
   });
 
+  it('routes admin product actions', async () => {
+    const adminListProducts = vi.fn(async () => ({
+      ok: true,
+      data: { products: [{ _id: 'p1' }] }
+    }));
+    const saveProduct = vi.fn(async (data) => ({
+      ok: true,
+      data: { productId: data._id || 'new-product-id' }
+    }));
+    const { api } = loadApiWithCloud({}, undefined, {
+      listProducts: async () => ({ ok: true, data: { categories: [], products: [] } }),
+      adminListProducts,
+      saveProduct
+    });
+
+    await expect(api.main({ action: 'adminListProducts' })).resolves.toEqual({
+      ok: true,
+      data: { products: [{ _id: 'p1' }] }
+    });
+    await expect(api.main({ action: 'saveProduct', data: { _id: 'p1' } })).resolves.toEqual({
+      ok: true,
+      data: { productId: 'p1' }
+    });
+    expect(adminListProducts).toHaveBeenCalledOnce();
+    expect(saveProduct).toHaveBeenCalledOnce();
+  });
+
   it('preserves validation errors from order actions', async () => {
     const validationError = new Error('请选择商品');
     validationError.code = 'VALIDATION_ERROR';

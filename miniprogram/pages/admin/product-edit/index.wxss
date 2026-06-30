@@ -1,1 +1,95 @@
+.page {
+  min-height: 100vh;
+  background: #f6f8fb;
+  color: #1f2933;
+}
 
+.form {
+  padding: 28rpx;
+}
+
+.field,
+.switch-row {
+  margin-bottom: 20rpx;
+  padding: 24rpx;
+  border-radius: 8rpx;
+  background: #ffffff;
+  box-shadow: 0 8rpx 24rpx rgba(15, 35, 52, 0.06);
+}
+
+.error-banner {
+  margin-bottom: 20rpx;
+  padding: 20rpx 24rpx;
+  border-radius: 8rpx;
+  background: #fff1f1;
+  color: #d64545;
+  font-size: 26rpx;
+  line-height: 1.4;
+}
+
+.label {
+  font-size: 26rpx;
+  line-height: 1.35;
+  font-weight: 700;
+  color: #102a43;
+}
+
+.hint {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #52606d;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  margin-top: 14rpx;
+  box-sizing: border-box;
+  color: #1f2933;
+  font-size: 28rpx;
+  line-height: 1.4;
+}
+
+.input {
+  min-height: 62rpx;
+}
+
+.textarea {
+  min-height: 140rpx;
+}
+
+.switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24rpx;
+}
+
+.save-button {
+  height: 88rpx;
+  margin: 28rpx 0 0;
+  border-radius: 8rpx;
+  background: #1d4e89;
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 700;
+  line-height: 88rpx;
+}
+
+.save-button::after {
+  border: 0;
+}
+
+.state {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48rpx;
+  color: #52606d;
+  font-size: 28rpx;
+}
+
+.state-error {
+  color: #d64545;
+}

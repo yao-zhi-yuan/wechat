@@ -1,1 +1,21 @@
-<view>Admin</view>
+<view class="page">
+  <view class="header">
+    <view class="title">商家管理</view>
+    <view class="subtitle">管理商品、订单和配送进度</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="state">加载中...</view>
+
+  <view wx:elif="{{error}}" class="state state-error">
+    <text>{{error}}</text>
+  </view>
+
+  <view wx:else class="actions">
+    <view class="metric">
+      <view class="metric-value">{{productCount}}</view>
+      <view class="metric-label">商品数量</view>
+    </view>
+    <button class="action-button primary" bindtap="goProducts">商品管理</button>
+    <button class="action-button" bindtap="goOrders">订单管理</button>
+  </view>
+</view>
