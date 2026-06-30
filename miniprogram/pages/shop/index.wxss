@@ -16,11 +16,33 @@
   box-shadow: 0 8rpx 24rpx rgba(15, 35, 52, 0.06);
 }
 
+.shop-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
 .shop-title {
+  flex: 1;
+  min-width: 0;
   font-size: 42rpx;
   line-height: 1.25;
   font-weight: 700;
   color: #102a43;
+}
+
+.orders-button {
+  flex: 0 0 auto;
+  height: 58rpx;
+  margin: 0;
+  padding: 0 22rpx;
+  border-radius: 8rpx;
+  background: #e6f0fb;
+  color: #1d4e89;
+  font-size: 24rpx;
+  font-weight: 600;
+  line-height: 58rpx;
 }
 
 .announcement {
@@ -145,6 +167,7 @@
 }
 
 .add-button::after,
+.orders-button::after,
 .retry-button::after,
 .checkout-button::after {
   border: 0;

@@ -12,7 +12,10 @@
 
   <view wx:else class="content">
     <view class="shop-header">
-      <view class="shop-title">{{shopName}}</view>
+      <view class="shop-title-row">
+        <view class="shop-title">{{shopName}}</view>
+        <button class="orders-button" bindtap="goOrders">我的订单</button>
+      </view>
       <view wx:if="{{shop.announcement}}" class="announcement">{{shop.announcement}}</view>
       <view class="shop-meta">
         <view wx:if="{{shop.businessHours}}" class="meta-row">

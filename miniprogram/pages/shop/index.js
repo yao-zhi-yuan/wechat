@@ -90,6 +90,10 @@ Page({
     });
   },
 
+  goOrders() {
+    wx.navigateTo({ url: '/pages/orders/index' });
+  },
+
   onShareAppMessage() {
     return {
       title: this.data.shopName || DEFAULT_SHOP_NAME,
