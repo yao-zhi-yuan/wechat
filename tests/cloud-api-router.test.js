@@ -6,7 +6,7 @@ const require = createRequire(import.meta.url);
 const apiPath = require.resolve('../cloudfunctions/api/index.js');
 const originalLoad = Module._load;
 
-function loadApiWithCloud(cloudOverrides = {}, shopModule, productsModule, ordersModule) {
+function loadApiWithCloud(cloudOverrides = {}, shopModule, productsModule, ordersModule, paymentsModule) {
   delete require.cache[apiPath];
 
   const cloud = {
@@ -29,6 +29,9 @@ function loadApiWithCloud(cloudOverrides = {}, shopModule, productsModule, order
     }
     if (request === './lib/orders' && ordersModule) {
       return ordersModule;
+    }
+    if (request === './lib/payments' && paymentsModule) {
+      return paymentsModule;
     }
     return originalLoad.call(this, request, parent, isMain);
   };
@@ -165,5 +168,19 @@ describe('cloud api router', () => {
       error: { code: 'VALIDATION_ERROR', message: '请选择商品' }
     });
     expect(createOrder).toHaveBeenCalledOnce();
+  });
+
+  it('routes createPayment actions', async () => {
+    const createPayment = vi.fn(async (data) => ({
+      ok: true,
+      data: { orderId: data.orderId, payment: { timeStamp: '1' } }
+    }));
+    const { api } = loadApiWithCloud({}, undefined, undefined, undefined, { createPayment });
+
+    await expect(api.main({ action: 'createPayment', data: { orderId: 'order-1' } })).resolves.toEqual({
+      ok: true,
+      data: { orderId: 'order-1', payment: { timeStamp: '1' } }
+    });
+    expect(createPayment).toHaveBeenCalledOnce();
   });
 });

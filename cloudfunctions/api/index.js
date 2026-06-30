@@ -2,6 +2,7 @@ const cloud = require('wx-server-sdk');
 const { createContext } = require('./lib/context');
 const { fail } = require('./lib/response');
 const { createOrder } = require('./lib/orders');
+const { createPayment } = require('./lib/payments');
 const { listProducts } = require('./lib/products');
 const { getShopConfig, getSession } = require('./lib/shop');
 
@@ -14,7 +15,8 @@ const actions = {
   getShopConfig,
   getSession,
   listProducts,
-  createOrder
+  createOrder,
+  createPayment
 };
 
 exports.main = async (event) => {

@@ -1,6 +1,7 @@
 import { callApi } from '../../services/api';
 import { validateReceiver } from '../../utils/validators';
 import { cartToItems, parseCheckoutCart } from './cart';
+import { requestOrderPayment } from './payment';
 
 Page({
   data: {
@@ -47,7 +48,9 @@ Page({
         receiverAddress: receiver.address,
         remark: this.data.remark
       });
-      wx.navigateTo({ url: `/pages/order-detail/index?id=${order.orderId}` });
+      const pay = await callApi('createPayment', { orderId: order.orderId });
+      await requestOrderPayment(wx, pay.payment);
+      wx.redirectTo({ url: `/pages/order-detail/index?id=${order.orderId}` });
     } catch (error) {
       const message = error && error.message ? error.message : '提交失败';
       this.setData({ error: message });
