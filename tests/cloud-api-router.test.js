@@ -6,7 +6,7 @@ const require = createRequire(import.meta.url);
 const apiPath = require.resolve('../cloudfunctions/api/index.js');
 const originalLoad = Module._load;
 
-function loadApiWithCloud(cloudOverrides = {}) {
+function loadApiWithCloud(cloudOverrides = {}, shopModule) {
   delete require.cache[apiPath];
 
   const cloud = {
@@ -20,6 +20,9 @@ function loadApiWithCloud(cloudOverrides = {}) {
   Module._load = function load(request, parent, isMain) {
     if (request === 'wx-server-sdk') {
       return cloud;
+    }
+    if (request === './lib/shop' && shopModule) {
+      return shopModule;
     }
     return originalLoad.call(this, request, parent, isMain);
   };
@@ -64,6 +67,54 @@ describe('cloud api router', () => {
     });
 
     await expect(api.main({ action: 'ping' })).resolves.toEqual({
+      ok: false,
+      error: { code: 'INTERNAL_ERROR', message: '服务暂时不可用' }
+    });
+  });
+
+  it('preserves expected application errors from actions', async () => {
+    const forbidden = new Error('需要管理员权限');
+    forbidden.code = 'FORBIDDEN';
+    const { api } = loadApiWithCloud({}, {
+      getShopConfig: async () => {
+        throw forbidden;
+      },
+      getSession: async () => ({ ok: true, data: {} })
+    });
+
+    await expect(api.main({ action: 'getShopConfig' })).resolves.toEqual({
+      ok: false,
+      error: { code: 'FORBIDDEN', message: '需要管理员权限' }
+    });
+  });
+
+  it('keeps unexpected action errors generic', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    const { api } = loadApiWithCloud({}, {
+      getShopConfig: async () => {
+        throw new Error('database secret detail');
+      },
+      getSession: async () => ({ ok: true, data: {} })
+    });
+
+    await expect(api.main({ action: 'getShopConfig' })).resolves.toEqual({
+      ok: false,
+      error: { code: 'INTERNAL_ERROR', message: '服务暂时不可用' }
+    });
+  });
+
+  it('keeps unexpected coded action errors generic', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    const sdkError = new Error('socket disconnected');
+    sdkError.code = 'ECONNRESET';
+    const { api } = loadApiWithCloud({}, {
+      getShopConfig: async () => {
+        throw sdkError;
+      },
+      getSession: async () => ({ ok: true, data: {} })
+    });
+
+    await expect(api.main({ action: 'getShopConfig' })).resolves.toEqual({
       ok: false,
       error: { code: 'INTERNAL_ERROR', message: '服务暂时不可用' }
     });
