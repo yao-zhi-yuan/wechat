@@ -62,11 +62,24 @@ Page({
     await this.runOrderAction('completeOrder', '订单已完成');
   },
 
-  async runOrderAction(action, successTitle) {
+  requestRefund() {
+    if (!this.data.order || !this.data.order.canRefund) return;
+    wx.showModal({
+      title: '确认退款',
+      content: '将按订单实付金额原路退款',
+      success: async (result) => {
+        if (result.confirm) {
+          await this.runOrderAction('requestRefund', '已申请退款', { reason: '商家退款' });
+        }
+      }
+    });
+  },
+
+  async runOrderAction(action, successTitle, extraData = {}) {
     if (this.data.operating || !this.data.orderId) return;
     this.setData({ operating: true, error: '' });
     try {
-      await callApi(action, { orderId: this.data.orderId });
+      await callApi(action, { orderId: this.data.orderId, ...extraData });
       wx.showToast({ title: successTitle, icon: 'success' });
       await this.loadOrder(this.data.orderId);
     } catch (error) {

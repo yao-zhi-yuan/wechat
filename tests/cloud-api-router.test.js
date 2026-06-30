@@ -6,7 +6,7 @@ const require = createRequire(import.meta.url);
 const apiPath = require.resolve('../cloudfunctions/api/index.js');
 const originalLoad = Module._load;
 
-function loadApiWithCloud(cloudOverrides = {}, shopModule, productsModule, ordersModule, paymentsModule, orderQueriesModule) {
+function loadApiWithCloud(cloudOverrides = {}, shopModule, productsModule, ordersModule, paymentsModule, orderQueriesModule, refundsModule) {
   delete require.cache[apiPath];
 
   const cloud = {
@@ -35,6 +35,9 @@ function loadApiWithCloud(cloudOverrides = {}, shopModule, productsModule, order
     }
     if (request === './lib/orderQueries' && orderQueriesModule) {
       return orderQueriesModule;
+    }
+    if (request === './lib/refunds' && refundsModule) {
+      return refundsModule;
     }
     return originalLoad.call(this, request, parent, isMain);
   };
@@ -226,6 +229,17 @@ describe('cloud api router', () => {
     expect(adminListOrders).toHaveBeenCalledOnce();
     expect(startDelivery).toHaveBeenCalledOnce();
     expect(completeOrder).toHaveBeenCalledOnce();
+  });
+
+  it('routes refund actions', async () => {
+    const requestRefund = vi.fn(async (data) => ({ ok: true, data: { orderId: data.orderId, outRefundNo: 'R1' } }));
+    const { api } = loadApiWithCloud({}, undefined, undefined, undefined, undefined, undefined, { requestRefund });
+
+    await expect(api.main({ action: 'requestRefund', data: { orderId: 'order-1' } })).resolves.toEqual({
+      ok: true,
+      data: { orderId: 'order-1', outRefundNo: 'R1' }
+    });
+    expect(requestRefund).toHaveBeenCalledOnce();
   });
 
   it('routes createPayment actions', async () => {

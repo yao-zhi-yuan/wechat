@@ -13,6 +13,7 @@ export function buildAdminOrderDetailViewModel(order) {
       : '',
     canStartDelivery: order.status === 'paid_waiting_delivery',
     canComplete: order.status === 'delivering',
+    canRefund: order.payStatus === 'paid' && order.refundStatus === 'none',
     items: (order.items || []).map((item) => ({
       ...item,
       priceText: formatFen(item.priceFen || 0),

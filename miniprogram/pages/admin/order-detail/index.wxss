@@ -132,6 +132,11 @@
   color: #ffffff;
 }
 
+.action-button.danger {
+  background: #d64545;
+  color: #ffffff;
+}
+
 .action-button::after {
   border: 0;
 }

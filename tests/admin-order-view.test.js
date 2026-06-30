@@ -35,6 +35,8 @@ describe('admin order view models', () => {
     expect(buildAdminOrderDetailViewModel({
       _id: 'order-1',
       status: 'paid_waiting_delivery',
+      payStatus: 'paid',
+      refundStatus: 'none',
       payAmountFen: 3600,
       wechatShippingUploadStatus: 'failed',
       items: [
@@ -47,6 +49,7 @@ describe('admin order view models', () => {
       shippingHelpText: '发货信息同步失败，请在微信小程序后台手工补录发货信息。',
       canStartDelivery: true,
       canComplete: false,
+      canRefund: true,
       items: [{
         name: '农夫山泉桶装水',
         quantity: 2,

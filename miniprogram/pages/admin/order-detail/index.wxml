@@ -61,6 +61,7 @@
     <view class="actions">
       <button wx:if="{{order.canStartDelivery}}" class="action-button primary" loading="{{operating}}" disabled="{{operating}}" bindtap="startDelivery">开始配送</button>
       <button wx:if="{{order.canComplete}}" class="action-button primary" loading="{{operating}}" disabled="{{operating}}" bindtap="completeOrder">完成订单</button>
+      <button wx:if="{{order.canRefund}}" class="action-button danger" loading="{{operating}}" disabled="{{operating}}" bindtap="requestRefund">申请退款</button>
     </view>
   </view>
 </view>
