@@ -1,6 +1,8 @@
 const { COLLECTIONS } = require('./db');
+const { requireAdmin } = require('./admins');
 const { validationError } = require('./errors');
 const { ok } = require('./response');
+const { uploadShippingInfo } = require('./shipping');
 const { randomInt } = require('crypto');
 
 const PROCESS_ENTROPY = randomInt(0, 10000);
@@ -82,6 +84,92 @@ async function createOrder(data, ctx) {
   return ok({ orderId: result._id, orderNo: order.orderNo, payAmountFen: order.payAmountFen });
 }
 
+async function adminListOrders(data, ctx) {
+  await requireAdmin(ctx);
+  const where = data.status ? { status: data.status } : {};
+  const result = await ctx.db.collection(COLLECTIONS.orders)
+    .where(where)
+    .orderBy('createdAt', 'desc')
+    .limit(100)
+    .get();
+  return ok({ orders: result.data || [] });
+}
+
+async function startDelivery(data, ctx) {
+  await requireAdmin(ctx);
+  if (!data.orderId) {
+    throw validationError('订单不存在');
+  }
+
+  const orderDoc = ctx.db.collection(COLLECTIONS.orders).doc(data.orderId);
+  const orderResult = await orderDoc.get();
+  const order = orderResult.data;
+  if (!order || order.status !== 'paid_waiting_delivery') {
+    throw validationError('订单状态不可配送');
+  }
+
+  const now = new Date();
+  await orderDoc.update({
+    data: {
+      status: 'delivering',
+      deliveryStatus: 'delivering',
+      deliveryStartedAt: now,
+      wechatShippingUploadStatus: 'pending',
+      updatedAt: now
+    }
+  });
+
+  try {
+    const uploader = ctx.uploadShippingInfo || uploadShippingInfo;
+    await uploader(order, ctx);
+    const uploadedAt = new Date();
+    await orderDoc.update({
+      data: {
+        wechatShippingUploadStatus: 'uploaded',
+        wechatShippingUploadedAt: uploadedAt,
+        wechatShippingError: '',
+        updatedAt: uploadedAt
+      }
+    });
+  } catch (error) {
+    const failedAt = new Date();
+    await orderDoc.update({
+      data: {
+        wechatShippingUploadStatus: 'failed',
+        wechatShippingError: error && error.message ? error.message : '发货信息同步失败',
+        updatedAt: failedAt
+      }
+    });
+  }
+
+  return ok({ orderId: data.orderId });
+}
+
+async function completeOrder(data, ctx) {
+  await requireAdmin(ctx);
+  if (!data.orderId) {
+    throw validationError('订单不存在');
+  }
+
+  const orderDoc = ctx.db.collection(COLLECTIONS.orders).doc(data.orderId);
+  const orderResult = await orderDoc.get();
+  const order = orderResult.data;
+  if (!order || order.status !== 'delivering') {
+    throw validationError('订单状态不可完成');
+  }
+
+  const now = new Date();
+  await orderDoc.update({
+    data: {
+      status: 'completed',
+      deliveryStatus: 'completed',
+      completedAt: now,
+      updatedAt: now
+    }
+  });
+  return ok({ orderId: data.orderId });
+}
+
 function validateReceiver(data) {
   const name = String(data.receiverName || '').trim();
   const phone = String(data.receiverPhone || '').trim();
@@ -104,4 +192,11 @@ function hashString(input) {
     .reduce((hash, char) => ((hash << 5) - hash + char.charCodeAt(0)) | 0, 0);
 }
 
-module.exports = { createOrderNo, buildOrderItems, createOrder };
+module.exports = {
+  adminListOrders,
+  buildOrderItems,
+  completeOrder,
+  createOrder,
+  createOrderNo,
+  startDelivery
+};

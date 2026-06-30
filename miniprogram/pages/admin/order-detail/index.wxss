@@ -1,1 +1,151 @@
+.page {
+  min-height: 100vh;
+  background: #f6f8fb;
+  color: #1f2933;
+}
 
+.content {
+  padding: 28rpx;
+}
+
+.section {
+  margin-bottom: 20rpx;
+  padding: 28rpx;
+  border-radius: 8rpx;
+  background: #ffffff;
+  box-shadow: 0 8rpx 24rpx rgba(15, 35, 52, 0.06);
+}
+
+.section-title {
+  margin-bottom: 18rpx;
+  font-size: 30rpx;
+  line-height: 1.35;
+  font-weight: 700;
+  color: #102a43;
+}
+
+.row,
+.total-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24rpx;
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  line-height: 1.45;
+}
+
+.label {
+  flex: 0 0 auto;
+  color: #52606d;
+}
+
+.value {
+  flex: 1;
+  min-width: 0;
+  text-align: right;
+  color: #1f2933;
+}
+
+.address,
+.remark,
+.warning {
+  margin-top: 14rpx;
+  font-size: 26rpx;
+  line-height: 1.45;
+  color: #52606d;
+}
+
+.warning,
+.error-banner {
+  color: #d64545;
+}
+
+.error-banner {
+  margin-bottom: 20rpx;
+  padding: 20rpx 24rpx;
+  border-radius: 8rpx;
+  background: #fff1f1;
+  font-size: 26rpx;
+  line-height: 1.4;
+}
+
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 24rpx;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #eef2f6;
+}
+
+.item-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-name {
+  font-size: 26rpx;
+  line-height: 1.35;
+  font-weight: 700;
+  color: #102a43;
+}
+
+.item-spec {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #52606d;
+}
+
+.item-side {
+  min-width: 170rpx;
+  text-align: right;
+  font-size: 24rpx;
+  color: #52606d;
+}
+
+.subtotal,
+.total-row {
+  font-weight: 700;
+  color: #d64545;
+}
+
+.total-row {
+  margin-top: 20rpx;
+  font-size: 30rpx;
+}
+
+.actions {
+  padding-bottom: 32rpx;
+}
+
+.action-button {
+  height: 88rpx;
+  margin: 0 0 18rpx;
+  border-radius: 8rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+  line-height: 88rpx;
+}
+
+.action-button.primary {
+  background: #1d4e89;
+  color: #ffffff;
+}
+
+.action-button::after {
+  border: 0;
+}
+
+.state {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48rpx;
+  color: #52606d;
+  font-size: 28rpx;
+}
+
+.state-error {
+  color: #d64545;
+}

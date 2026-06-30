@@ -200,6 +200,34 @@ describe('cloud api router', () => {
     expect(createOrder).toHaveBeenCalledOnce();
   });
 
+  it('routes admin order actions', async () => {
+    const adminListOrders = vi.fn(async () => ({ ok: true, data: { orders: [] } }));
+    const startDelivery = vi.fn(async (data) => ({ ok: true, data: { orderId: data.orderId } }));
+    const completeOrder = vi.fn(async (data) => ({ ok: true, data: { orderId: data.orderId } }));
+    const { api } = loadApiWithCloud({}, undefined, undefined, {
+      createOrder: async () => ({ ok: true, data: {} }),
+      adminListOrders,
+      startDelivery,
+      completeOrder
+    });
+
+    await expect(api.main({ action: 'adminListOrders' })).resolves.toEqual({
+      ok: true,
+      data: { orders: [] }
+    });
+    await expect(api.main({ action: 'startDelivery', data: { orderId: 'order-1' } })).resolves.toEqual({
+      ok: true,
+      data: { orderId: 'order-1' }
+    });
+    await expect(api.main({ action: 'completeOrder', data: { orderId: 'order-1' } })).resolves.toEqual({
+      ok: true,
+      data: { orderId: 'order-1' }
+    });
+    expect(adminListOrders).toHaveBeenCalledOnce();
+    expect(startDelivery).toHaveBeenCalledOnce();
+    expect(completeOrder).toHaveBeenCalledOnce();
+  });
+
   it('routes createPayment actions', async () => {
     const createPayment = vi.fn(async (data) => ({
       ok: true,

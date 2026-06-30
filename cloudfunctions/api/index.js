@@ -1,7 +1,7 @@
 const cloud = require('wx-server-sdk');
 const { createContext } = require('./lib/context');
 const { fail } = require('./lib/response');
-const { createOrder } = require('./lib/orders');
+const { adminListOrders, completeOrder, createOrder, startDelivery } = require('./lib/orders');
 const { getMyOrder, listMyOrders } = require('./lib/orderQueries');
 const { createPayment } = require('./lib/payments');
 const { adminListProducts, listProducts, saveProduct } = require('./lib/products');
@@ -19,6 +19,9 @@ const actions = {
   adminListProducts,
   saveProduct,
   createOrder,
+  adminListOrders,
+  startDelivery,
+  completeOrder,
   createPayment,
   getMyOrder,
   listMyOrders
