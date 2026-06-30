@@ -6,7 +6,7 @@ const require = createRequire(import.meta.url);
 const apiPath = require.resolve('../cloudfunctions/api/index.js');
 const originalLoad = Module._load;
 
-function loadApiWithCloud(cloudOverrides = {}, shopModule, productsModule, ordersModule, paymentsModule) {
+function loadApiWithCloud(cloudOverrides = {}, shopModule, productsModule, ordersModule, paymentsModule, orderQueriesModule) {
   delete require.cache[apiPath];
 
   const cloud = {
@@ -32,6 +32,9 @@ function loadApiWithCloud(cloudOverrides = {}, shopModule, productsModule, order
     }
     if (request === './lib/payments' && paymentsModule) {
       return paymentsModule;
+    }
+    if (request === './lib/orderQueries' && orderQueriesModule) {
+      return orderQueriesModule;
     }
     return originalLoad.call(this, request, parent, isMain);
   };
@@ -182,5 +185,22 @@ describe('cloud api router', () => {
       data: { orderId: 'order-1', payment: { timeStamp: '1' } }
     });
     expect(createPayment).toHaveBeenCalledOnce();
+  });
+
+  it('routes customer order query actions', async () => {
+    const getMyOrder = vi.fn(async (data) => ({ ok: true, data: { _id: data.orderId } }));
+    const listMyOrders = vi.fn(async () => ({ ok: true, data: { orders: [] } }));
+    const { api } = loadApiWithCloud({}, undefined, undefined, undefined, undefined, { getMyOrder, listMyOrders });
+
+    await expect(api.main({ action: 'getMyOrder', data: { orderId: 'order-1' } })).resolves.toEqual({
+      ok: true,
+      data: { _id: 'order-1' }
+    });
+    await expect(api.main({ action: 'listMyOrders' })).resolves.toEqual({
+      ok: true,
+      data: { orders: [] }
+    });
+    expect(getMyOrder).toHaveBeenCalledOnce();
+    expect(listMyOrders).toHaveBeenCalledOnce();
   });
 });

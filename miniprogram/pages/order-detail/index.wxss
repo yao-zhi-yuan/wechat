@@ -1,1 +1,120 @@
+.page {
+  min-height: 100vh;
+  background: #f6f8fb;
+  color: #1f2933;
+}
 
+.content {
+  padding: 28rpx;
+}
+
+.summary,
+.section {
+  background: #ffffff;
+  border-radius: 8rpx;
+  box-shadow: 0 8rpx 24rpx rgba(15, 35, 52, 0.06);
+}
+
+.summary {
+  padding: 34rpx;
+}
+
+.status {
+  font-size: 38rpx;
+  line-height: 1.25;
+  font-weight: 700;
+  color: #102a43;
+}
+
+.amount {
+  margin-top: 16rpx;
+  font-size: 42rpx;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #d64545;
+}
+
+.order-no {
+  margin-top: 14rpx;
+  font-size: 24rpx;
+  color: #829ab1;
+}
+
+.section {
+  margin-top: 24rpx;
+  padding: 28rpx;
+}
+
+.section-title {
+  margin-bottom: 18rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #102a43;
+}
+
+.item-row,
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 24rpx;
+  padding: 18rpx 0;
+  border-top: 1rpx solid #e6edf4;
+}
+
+.item-row:first-of-type,
+.info-row:first-of-type {
+  border-top: 0;
+}
+
+.item-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-name {
+  font-size: 28rpx;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #102a43;
+}
+
+.item-spec,
+.quantity,
+.info-label {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #829ab1;
+}
+
+.item-side {
+  min-width: 140rpx;
+  text-align: right;
+  font-size: 26rpx;
+  color: #102a43;
+}
+
+.info-row {
+  justify-content: flex-start;
+  font-size: 26rpx;
+  line-height: 1.45;
+  color: #102a43;
+}
+
+.info-label {
+  flex: 0 0 100rpx;
+  margin-top: 0;
+}
+
+.state {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48rpx;
+  color: #52606d;
+  font-size: 28rpx;
+}
+
+.state-error {
+  color: #d64545;
+}
