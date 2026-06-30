@@ -6,7 +6,7 @@ const require = createRequire(import.meta.url);
 const apiPath = require.resolve('../cloudfunctions/api/index.js');
 const originalLoad = Module._load;
 
-function loadApiWithCloud(cloudOverrides = {}, shopModule, productsModule) {
+function loadApiWithCloud(cloudOverrides = {}, shopModule, productsModule, ordersModule) {
   delete require.cache[apiPath];
 
   const cloud = {
@@ -26,6 +26,9 @@ function loadApiWithCloud(cloudOverrides = {}, shopModule, productsModule) {
     }
     if (request === './lib/products' && productsModule) {
       return productsModule;
+    }
+    if (request === './lib/orders' && ordersModule) {
+      return ordersModule;
     }
     return originalLoad.call(this, request, parent, isMain);
   };
@@ -147,5 +150,20 @@ describe('cloud api router', () => {
       data: { categories: [], products: [], requestData: { includeHidden: false } }
     });
     expect(listProducts).toHaveBeenCalledOnce();
+  });
+
+  it('preserves validation errors from order actions', async () => {
+    const validationError = new Error('请选择商品');
+    validationError.code = 'VALIDATION_ERROR';
+    const createOrder = vi.fn(async () => {
+      throw validationError;
+    });
+    const { api } = loadApiWithCloud({}, undefined, undefined, { createOrder });
+
+    await expect(api.main({ action: 'createOrder', data: { items: [] } })).resolves.toEqual({
+      ok: false,
+      error: { code: 'VALIDATION_ERROR', message: '请选择商品' }
+    });
+    expect(createOrder).toHaveBeenCalledOnce();
   });
 });

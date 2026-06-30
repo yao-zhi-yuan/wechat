@@ -1,1 +1,64 @@
-<view>Checkout</view>
+<view class="page">
+  <view wx:if="{{items.length}}" class="content">
+    <view class="summary">
+      <view class="summary-title">确认订单</view>
+      <view class="summary-count">已选 {{items.length}} 种商品</view>
+    </view>
+
+    <view class="form-section">
+      <view class="field">
+        <text class="field-label">收货人</text>
+        <input
+          class="field-input"
+          placeholder="请输入姓名"
+          value="{{receiverName}}"
+          data-field="receiverName"
+          bindinput="updateField"
+        />
+      </view>
+      <view class="field">
+        <text class="field-label">手机号</text>
+        <input
+          class="field-input"
+          type="number"
+          maxlength="11"
+          placeholder="请输入手机号"
+          value="{{receiverPhone}}"
+          data-field="receiverPhone"
+          bindinput="updateField"
+        />
+      </view>
+      <view class="field field-textarea">
+        <text class="field-label">收货地址</text>
+        <textarea
+          class="field-input textarea"
+          placeholder="请输入详细地址"
+          value="{{receiverAddress}}"
+          data-field="receiverAddress"
+          bindinput="updateField"
+        />
+      </view>
+      <view class="field field-textarea">
+        <text class="field-label">备注</text>
+        <textarea
+          class="field-input textarea"
+          placeholder="选填"
+          value="{{remark}}"
+          data-field="remark"
+          bindinput="updateField"
+        />
+      </view>
+    </view>
+
+    <view wx:if="{{error}}" class="error">{{error}}</view>
+
+    <button class="submit-button" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submitOrder">
+      {{submitting ? '提交中...' : '提交订单'}}
+    </button>
+  </view>
+
+  <view wx:else class="empty">
+    <text class="empty-title">购物车为空</text>
+    <text class="empty-text">请返回店铺选择商品</text>
+  </view>
+</view>

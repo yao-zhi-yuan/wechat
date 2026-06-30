@@ -1,1 +1,120 @@
+.page {
+  min-height: 100vh;
+  background: #f6f8fb;
+  color: #1f2933;
+}
 
+.content {
+  padding: 28rpx;
+}
+
+.summary {
+  background: #ffffff;
+  border-radius: 8rpx;
+  padding: 32rpx;
+  box-shadow: 0 8rpx 24rpx rgba(15, 35, 52, 0.06);
+}
+
+.summary-title {
+  font-size: 38rpx;
+  line-height: 1.3;
+  font-weight: 700;
+  color: #102a43;
+}
+
+.summary-count {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  color: #52606d;
+}
+
+.form-section {
+  margin-top: 24rpx;
+  background: #ffffff;
+  border-radius: 8rpx;
+  padding: 0 28rpx;
+  box-shadow: 0 8rpx 24rpx rgba(15, 35, 52, 0.05);
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  min-height: 104rpx;
+  border-bottom: 1rpx solid #e6edf4;
+}
+
+.field:last-child {
+  border-bottom: 0;
+}
+
+.field-textarea {
+  align-items: flex-start;
+  padding: 26rpx 0;
+}
+
+.field-label {
+  flex: 0 0 136rpx;
+  font-size: 28rpx;
+  color: #52606d;
+}
+
+.field-input {
+  flex: 1;
+  min-height: 72rpx;
+  font-size: 28rpx;
+  color: #102a43;
+}
+
+.textarea {
+  height: 144rpx;
+  line-height: 1.5;
+}
+
+.error {
+  margin-top: 20rpx;
+  font-size: 26rpx;
+  line-height: 1.5;
+  color: #d64545;
+}
+
+.submit-button {
+  height: 88rpx;
+  margin-top: 32rpx;
+  border-radius: 8rpx;
+  background: #1d4e89;
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 700;
+  line-height: 88rpx;
+}
+
+.submit-button[disabled] {
+  background: #9fb3c8;
+  color: #ffffff;
+}
+
+.submit-button::after {
+  border: 0;
+}
+
+.empty {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48rpx;
+  text-align: center;
+}
+
+.empty-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #102a43;
+}
+
+.empty-text {
+  margin-top: 14rpx;
+  font-size: 26rpx;
+  color: #829ab1;
+}
