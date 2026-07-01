@@ -1,5 +1,7 @@
 # Deployment
 
+Before release, also review [security-rules.md](./security-rules.md) and [release-checklist.md](./release-checklist.md).
+
 Create these cloud database collections before first release:
 
 - `shop_config`
