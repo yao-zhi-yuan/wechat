@@ -2,6 +2,7 @@ const cloud = require('wx-server-sdk');
 const { createContext } = require('./lib/context');
 const { fail } = require('./lib/response');
 const { adminListOrders, completeOrder, createOrder, startDelivery } = require('./lib/orders');
+const { bootstrapInitialData } = require('./lib/bootstrap');
 const { enableAdminNewOrderNotice } = require('./lib/notifications');
 const { getMyOrder, listMyOrders } = require('./lib/orderQueries');
 const { createPayment } = require('./lib/payments');
@@ -15,6 +16,7 @@ const APPLICATION_ERROR_CODES = new Set(['FORBIDDEN', 'VALIDATION_ERROR']);
 
 const actions = {
   ping: async () => ({ ok: true, data: { pong: true } }),
+  bootstrapInitialData,
   getShopConfig,
   getSession,
   listProducts,

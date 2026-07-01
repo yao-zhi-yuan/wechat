@@ -6,7 +6,16 @@ const require = createRequire(import.meta.url);
 const apiPath = require.resolve('../cloudfunctions/api/index.js');
 const originalLoad = Module._load;
 
-function loadApiWithCloud(cloudOverrides = {}, shopModule, productsModule, ordersModule, paymentsModule, orderQueriesModule, refundsModule) {
+function loadApiWithCloud(
+  cloudOverrides = {},
+  shopModule,
+  productsModule,
+  ordersModule,
+  paymentsModule,
+  orderQueriesModule,
+  refundsModule,
+  bootstrapModule
+) {
   delete require.cache[apiPath];
 
   const cloud = {
@@ -38,6 +47,9 @@ function loadApiWithCloud(cloudOverrides = {}, shopModule, productsModule, order
     }
     if (request === './lib/refunds' && refundsModule) {
       return refundsModule;
+    }
+    if (request === './lib/bootstrap' && bootstrapModule) {
+      return bootstrapModule;
     }
     return originalLoad.call(this, request, parent, isMain);
   };
@@ -159,6 +171,25 @@ describe('cloud api router', () => {
       data: { categories: [], products: [], requestData: { includeHidden: false } }
     });
     expect(listProducts).toHaveBeenCalledOnce();
+  });
+
+  it('routes bootstrapInitialData actions', async () => {
+    const bootstrapInitialData = vi.fn(async (data) => ({
+      ok: true,
+      data: { bootstrapped: data.confirm }
+    }));
+    const { api } = loadApiWithCloud({}, undefined, undefined, undefined, undefined, undefined, undefined, {
+      bootstrapInitialData
+    });
+
+    await expect(api.main({
+      action: 'bootstrapInitialData',
+      data: { confirm: 'INIT_WATER_SHOP' }
+    })).resolves.toEqual({
+      ok: true,
+      data: { bootstrapped: 'INIT_WATER_SHOP' }
+    });
+    expect(bootstrapInitialData).toHaveBeenCalledOnce();
   });
 
   it('routes admin product actions', async () => {
