@@ -79,7 +79,7 @@ Use the current repository root as the project root.
     "postcss": true,
     "minified": true
   },
-  "appid": "touristappid",
+  "appid": "wx0fb4b65ec8e331a5",
   "projectname": "wechat"
 }
 ```
