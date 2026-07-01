@@ -33,3 +33,8 @@ Use CloudPay first. If the account cannot use CloudPay, replace `cloud.cloudPay.
 
 Configure cloud function environment variable `NEW_ORDER_TEMPLATE_ID` with the template selected in WeChat public platform. Store the same template ID in `shop_config.templateIds.newOrder` so the admin page can request subscription permission before cloud functions send messages.
 Admin users must tap “开启新订单提醒” in the merchant dashboard before receiving messages.
+
+## Platform Message Push
+
+Configure WeChat Mini Program message push URL or cloud function binding so order shipping events reach `platformNotify`.
+Track these events in logs: `trade_manage_remind_access_api`, `trade_manage_remind_shipping`, `trade_manage_order_settlement`, `wxa_trade_controlled`.
