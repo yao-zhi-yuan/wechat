@@ -34,5 +34,25 @@ Page({
 
   goOrders() {
     wx.navigateTo({ url: '/pages/admin/orders/index' });
+  },
+
+  async enableNotice() {
+    try {
+      const shop = await callApi('getShopConfig');
+      const templateId = shop.templateIds && shop.templateIds.newOrder;
+      if (!templateId) {
+        wx.showToast({ title: '新订单提醒未配置', icon: 'none' });
+        return;
+      }
+      const result = await wx.requestSubscribeMessage({ tmplIds: [templateId] });
+      if (!result || result[templateId] !== 'accept') {
+        wx.showToast({ title: '未获得提醒权限', icon: 'none' });
+        return;
+      }
+      await callApi('enableAdminNewOrderNotice');
+      wx.showToast({ title: '已开启提醒' });
+    } catch (error) {
+      wx.showToast({ title: '开启失败', icon: 'none' });
+    }
   }
 });

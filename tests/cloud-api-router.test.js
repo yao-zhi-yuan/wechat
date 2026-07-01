@@ -272,4 +272,46 @@ describe('cloud api router', () => {
     expect(getMyOrder).toHaveBeenCalledOnce();
     expect(listMyOrders).toHaveBeenCalledOnce();
   });
+
+  it('enables new order notices for the current admin', async () => {
+    const updateAdmin = vi.fn(async () => ({}));
+    const adminWhere = vi.fn((query) => {
+      expect(query).toEqual({ openId: 'openid-1', enabled: true });
+      return {
+        limit: vi.fn(() => createQuery([{ _id: 'admin-1', openId: 'openid-1', enabled: true }])),
+        update: updateAdmin
+      };
+    });
+    const db = {
+      collection: vi.fn((name) => {
+        if (name !== 'admins') {
+          throw new Error(`unexpected collection: ${name}`);
+        }
+        return {
+          where: adminWhere
+        };
+      })
+    };
+    const { api } = loadApiWithCloud({ database: vi.fn(() => db) });
+
+    await expect(api.main({ action: 'enableAdminNewOrderNotice' })).resolves.toEqual({
+      ok: true,
+      data: { enabled: true }
+    });
+    expect(updateAdmin).toHaveBeenCalledWith({
+      data: {
+        newOrderNoticeEnabled: true,
+        updatedAt: expect.any(Date)
+      }
+    });
+    expect(adminWhere).toHaveBeenCalledTimes(2);
+  });
 });
+
+function createQuery(data) {
+  const query = {
+    limit: vi.fn(() => query),
+    get: vi.fn(async () => ({ data }))
+  };
+  return query;
+}

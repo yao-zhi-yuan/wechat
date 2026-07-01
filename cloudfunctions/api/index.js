@@ -2,6 +2,7 @@ const cloud = require('wx-server-sdk');
 const { createContext } = require('./lib/context');
 const { fail } = require('./lib/response');
 const { adminListOrders, completeOrder, createOrder, startDelivery } = require('./lib/orders');
+const { enableAdminNewOrderNotice } = require('./lib/notifications');
 const { getMyOrder, listMyOrders } = require('./lib/orderQueries');
 const { createPayment } = require('./lib/payments');
 const { adminListProducts, listProducts, saveProduct } = require('./lib/products');
@@ -26,7 +27,8 @@ const actions = {
   requestRefund,
   createPayment,
   getMyOrder,
-  listMyOrders
+  listMyOrders,
+  enableAdminNewOrderNotice
 };
 
 exports.main = async (event) => {

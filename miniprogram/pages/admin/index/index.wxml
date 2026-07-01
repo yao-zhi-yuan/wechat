@@ -17,5 +17,6 @@
     </view>
     <button class="action-button primary" bindtap="goProducts">商品管理</button>
     <button class="action-button" bindtap="goOrders">订单管理</button>
+    <button class="action-button" bindtap="enableNotice">开启新订单提醒</button>
   </view>
 </view>
